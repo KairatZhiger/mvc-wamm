@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://185.22.66.231/postgres
+    username: webadmin
+    password: BQNgsc61242
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    ddl-auto: update

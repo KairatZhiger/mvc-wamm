@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta
+            content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+            name="viewport">
+    <meta content="ie=edge" http-equiv="X-UA-Compatible">
+    <title>MVC рассылка</title>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+<body class="container">
+<h1 class="py-5">MVC отправка сообщений</h1>
+<form class="col card p-3 mb-5" method="post" th:action="@{/users/}" th:object="${userInfo}">
+    <div class="form-group">
+        <label for="firstName">Номер телефона</label>
+        <input class="form-control" id="firstName" placeholder="Введите номер телефона..."
+               th:field="*{phone}"
+               type="number"/>
+    </div>
+    <div class="form-group">
+        <label for="lastName">Сообщение</label>
+        <input class="form-control" id="lastName" placeholder="Сообщение..." required
+               th:field="*{message}"
+               type="text"/>
+    </div>
+    <div class="form-group" >
+        <label for="client">История номеров</label>
+        <select class="form-control " id="client"  th:field="*{client}">
+            <option hidden value="">Выберите номер телефона</option>
+            <option
+                    th:each="client : ${clients}"
+                    th:text="${client}"
+                    th:value="${client}">
+            </option>
+        </select>
+    </div>
+    <div class="form-group" align="center">
+        <input class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" th:field="*{flag}">
+        <label class="form-check-label" for="flexSwitchCheckDefault">Отправить всем</label>
+    </div>
+    <input class="btn btn-primary" type="submit" value="Отправить сообщение">
+</form>
+<table class="table table-striped table-bordered">
+    <tr>
+        <th>ID</th>
+        <th>Отправлен</th>
+        <th>Сообщение</th>
+        <th>Время отправки</th>
+        <th>Статус</th>
+    </tr>
+    <tr th:if="${#lists.isEmpty(users)}">
+        <td colspan="5">Здесь пока пусто. Начните чат...!</td>
+    </tr>
+    <tr th:each="user : ${users}">
+        <td th:text="${user.id}"></td>
+        <td th:text="${user.phone}"></td>
+        <td th:text="${user.message}"></td>
+        <td th:text="${user.createTime}"></td>
+        <td th:text="${user.status}"></td>
+    </tr>
+</table>
+</body>
+</html>
