@@ -30,9 +30,8 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/index").permitAll()
-                                .requestMatchers("/users/").permitAll()
-                                .requestMatchers("/users/*").permitAll()
-                                .requestMatchers("/users/**").permitAll()
+                                .requestMatchers("/users/").authenticated()//("SUPER_ROOT")
+
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")

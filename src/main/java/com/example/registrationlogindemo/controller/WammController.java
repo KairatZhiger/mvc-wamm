@@ -28,7 +28,7 @@ public class WammController {
 
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public String getUsers(Model model) {
+    public String getMessages(Model model) {
         var users = wammService.getMessageHistory();
         var clients=users.map(MessageHistoryEntity::getPhone);
         model.addAttribute("clients", clients);
@@ -38,7 +38,7 @@ public class WammController {
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public Mono<String> createUser(Model model, @ModelAttribute UserNotification userInfo) {
+    public Mono<String> sendMessage(Model model, @ModelAttribute UserNotification userInfo) {
         System.out.println(userInfo.toString());
         return wammService.createMessageHistory(userInfo)
                 .collectList().map(

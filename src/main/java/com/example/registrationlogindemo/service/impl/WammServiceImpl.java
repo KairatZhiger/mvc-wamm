@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,7 +20,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created By Kairat Zhiger
@@ -52,7 +55,6 @@ public class WammServiceImpl implements WammService {
                                         }
                                     }
                             )
-
                             .flatMap(response -> {
                                 log.info("Response: {}", response);
                                 ObjectMapper objectMapper = new ObjectMapper();
@@ -60,7 +62,7 @@ public class WammServiceImpl implements WammService {
                                 try {
                                     clientResponse = objectMapper.readValue(response, Response.class);
 
-                                    if (clientResponse.getErr()==0)
+                                    if (clientResponse.getErr() == 0)
                                         return Mono.just(Boolean.TRUE);
 
 
@@ -111,7 +113,7 @@ public class WammServiceImpl implements WammService {
                     try {
                         clientResponse = objectMapper.readValue(response, Response.class);
 
-                        if (clientResponse.getErr()==0)
+                        if (clientResponse.getErr() == 0)
                             return Mono.just(Boolean.TRUE);
 
 
@@ -128,7 +130,12 @@ public class WammServiceImpl implements WammService {
 
     @Override
     public Page<MessageHistoryEntity> getMessageHistory() {
-        return messageHistoryRepository.findAll(Pageable.ofSize(10));
+        var historyList = messageHistoryRepository.findAll().stream()
+                .sorted(Comparator.comparing(MessageHistoryEntity::getCreateTime).reversed())
+                .limit(10)
+                .collect(Collectors.toList());
+        return new PageImpl<>(historyList);
+
     }
 
     @Override

@@ -13,4 +13,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface MessageHistoryRepository extends JpaRepository<MessageHistoryEntity, Long> {
     @Override
     Page<MessageHistoryEntity> findAll(Pageable pageable);
+
+
 }
